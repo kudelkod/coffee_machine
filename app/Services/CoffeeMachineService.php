@@ -17,7 +17,10 @@ class CoffeeMachineService implements CoffeeMachineServiceInterface
         $this->coffeeMachineRepository = $coffeeMachineRepository;
     }
 
-    public function refuelMachine()
+    /**
+     * @return void
+     */
+    public function refuelMachine(): void
     {
         $this->coffeeMachineRepository->updateMachine(null, CoffeeMachineCostsEnum::max_water, CoffeeMachineCostsEnum::max_coffee);
 
@@ -29,7 +32,10 @@ class CoffeeMachineService implements CoffeeMachineServiceInterface
         }
     }
 
-    public function coffeeCreating()
+    /**
+     * @return void
+     */
+    public function coffeeCreating(): void
     {
         $coffeeMachine = $this->coffeeMachineRepository->getCoffeeMachine();
 
@@ -59,14 +65,14 @@ class CoffeeMachineService implements CoffeeMachineServiceInterface
         }
     }
 
-    public function createNewCoffee()
+    public function createNewCoffee(): array
     {
         MakeCoffee::dispatch($this)->onQueue('coffee');
 
         return ['message' => 'Кофе отправлен в очередь'];
     }
 
-    public function getRestOfWaterAndCoffee()
+    public function getRestOfWaterAndCoffee(): array
     {
         $coffeeMachine = $this->coffeeMachineRepository->getCoffeeMachine();
         $left_coffee = $coffeeMachine['coffee_count'];
@@ -86,14 +92,14 @@ class CoffeeMachineService implements CoffeeMachineServiceInterface
         ];
     }
 
-    public function getMachineStatus()
+    public function getMachineStatus(): array
     {
         $coffeeMachine = $this->coffeeMachineRepository->getCoffeeMachine();
 
         return ['status' =>$coffeeMachine['status']];
     }
 
-    public function getRestCupsOfCoffee()
+    public function getRestCupsOfCoffee(): array
     {
         $coffeeMachine = $this->coffeeMachineRepository->getCoffeeMachine();
         $left_coffee = $coffeeMachine['coffee_count'];

@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => '/coffee'], function($route){
     $route->get('/create', [CoffeeMachineController::class, 'createCoffee']);
-    $route->get('/count', [CoffeeMachineController::class, 'count']);
     $route->group(['prefix' => '/machine'], function ($route){
         $route->get('/refuel', [CoffeeMachineController::class, 'refuelMachine']);
         $route->get('/status', [CoffeeMachineController::class, 'machineStatus']);

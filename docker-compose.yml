@@ -9,10 +9,11 @@ services:
         volumes:
             - ./:/var/www/html
             - ./nginx/conf.d/:/etc/nginx/conf.d/
+        depends_on:
+            - app
         networks:
             - app
 
-        # Application Service
     app:
         container_name: app
         build:
@@ -28,6 +29,9 @@ services:
         volumes:
             - ./:/var/www/html
         working_dir: /var/www/html
+        depends_on:
+            - app-redis
+            - app-db
         networks:
             - app
 
@@ -44,8 +48,7 @@ services:
             SERVICE_TAGS: dev
             SERVICE_NAME: mysql
         volumes:
-            - dbdata:/var/lib/mysql/
-        #      - ./mysql/my.cnf:/etc/mysql/my.cnf
+            - db-data:/var/lib/mysql/
         networks:
             - app
 
@@ -59,7 +62,7 @@ services:
         networks:
             - app
         volumes:
-            - cache:/data
+            - redis-data:/data
 
     app-supervisor:
         build:
@@ -68,15 +71,18 @@ services:
         container_name: app-supervisor
         volumes:
             - .:/var/www/html
+        depends_on:
+            - app
         networks:
             - app
 
 networks:
     app:
+        driver: bridge
 
 volumes:
-    dbdata:
+    db-data:
         driver: local
 
-    cache:
+    redis-data:
         driver: local

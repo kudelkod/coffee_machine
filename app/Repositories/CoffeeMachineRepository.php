@@ -34,7 +34,7 @@ class CoffeeMachineRepository implements CoffeeMachineRepositoryInterface
         return $coffee_machine;
     }
 
-    public function updateMachine($status = null, $water = null, $coffee = null)
+    public function updateMachine($status = null, $water = null, $coffee = null): void
     {
         if ($water){
             Redis::hset('coffee_machine', 'water_count', $water);

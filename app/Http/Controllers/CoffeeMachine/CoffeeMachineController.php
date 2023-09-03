@@ -3,35 +3,25 @@
 namespace App\Http\Controllers\CoffeeMachine;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\MakeCoffee;
-use App\Models\Coffee;
-use App\Models\CoffeeMachine;
 use App\Services\impl\CoffeeMachineServiceInterface;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Http\JsonResponse;
 
 class CoffeeMachineController extends Controller
 {
-    private $coffeeMachineService;
+    private CoffeeMachineServiceInterface $coffeeMachineService;
 
     public function __construct(CoffeeMachineServiceInterface $coffeeMachineService)
     {
         $this->coffeeMachineService = $coffeeMachineService;
     }
-    public function createCoffee()
+    public function createCoffee(): JsonResponse
     {
         $result = $this->coffeeMachineService->createNewCoffee();
 
         return response()->json($result, 200);
     }
 
-    public function count()
-    {
-        $data = Queue::size('coffee');
-        return response()->json(['count' => $data], 200);
-    }
-
-    public function refuelMachine()
+    public function refuelMachine(): JsonResponse
     {
         $this->coffeeMachineService->refuelMachine();
 
@@ -39,21 +29,21 @@ class CoffeeMachineController extends Controller
 
     }
 
-    public function machineStatus()
+    public function machineStatus(): JsonResponse
     {
        $data = $this->coffeeMachineService->getMachineStatus();
 
         return response()->json($data, 200);
     }
 
-    public function restOfWaterAndCoffee()
+    public function restOfWaterAndCoffee(): JsonResponse
     {
         $data = $this->coffeeMachineService->getRestOfWaterAndCoffee();
 
         return response()->json($data, 200);
     }
 
-    public function restCupsOfCoffee()
+    public function restCupsOfCoffee(): JsonResponse
     {
         $data = $this->coffeeMachineService->getRestCupsOfCoffee();
 
