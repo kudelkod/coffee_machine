@@ -8,5 +8,9 @@ interface CoffeeMachineRepositoryInterface
 
     public function getCoffeeMachine();
 
-    public function updateMachine($status, $water, $coffee);
+    public function updateMachineStatus($status);
+
+    public function updateMachineWater($water);
+
+    public function updateMachineCoffee($coffee);
 }

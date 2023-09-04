@@ -6,8 +6,6 @@ interface CoffeeMachineServiceInterface
 {
     public function refuelMachine();
 
-    public function coffeeCreating();
-
     public function createNewCoffee();
 
 

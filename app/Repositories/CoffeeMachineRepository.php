@@ -34,16 +34,21 @@ class CoffeeMachineRepository implements CoffeeMachineRepositoryInterface
         return $coffee_machine;
     }
 
-    public function updateMachine($status = null, $water = null, $coffee = null): void
+    public function updateMachineStatus($status): bool
     {
-        if ($water){
-            Redis::hset('coffee_machine', 'water_count', $water);
-        }
-        if ($coffee){
-            Redis::hset('coffee_machine', 'coffee_count', $coffee);
-        }
-        if ($status){
-            Redis::hset('coffee_machine', 'status_id', $status);
-        }
+        Redis::hset('coffee_machine', 'status_id', $status);
+        return true;
+    }
+
+    public function updateMachineWater($water): bool
+    {
+        Redis::hset('coffee_machine', 'water_count', $water);
+        return true;
+    }
+
+    public function updateMachineCoffee($coffee): bool
+    {
+        Redis::hset('coffee_machine', 'coffee_count', $coffee);
+        return true;
     }
 }

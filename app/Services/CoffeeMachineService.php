@@ -18,56 +18,26 @@ class CoffeeMachineService implements CoffeeMachineServiceInterface
     }
 
     /**
-     * @return void
+     * @return string[]
      */
-    public function refuelMachine(): void
+    public function refuelMachine(): array
     {
-        $this->coffeeMachineRepository->updateMachine(null, CoffeeMachineCostsEnum::max_water, CoffeeMachineCostsEnum::max_coffee);
+        $this->coffeeMachineRepository->updateMachineWater(CoffeeMachineCostsEnum::max_water);
+        $this->coffeeMachineRepository->updateMachineCoffee(CoffeeMachineCostsEnum::max_coffee);
 
         $coffeeMachine = $this->coffeeMachineRepository->getCoffeeMachine();
 
         if ((int) $coffeeMachine['status_id'] === CoffeeMachineStatusesEnum::refuel)
         {
-            $this->coffeeMachineRepository->updateMachine(CoffeeMachineStatusesEnum::ready);
+            $this->coffeeMachineRepository->updateMachineStatus(CoffeeMachineStatusesEnum::ready);
         }
-    }
 
-    /**
-     * @return void
-     */
-    public function coffeeCreating(): void
-    {
-        $coffeeMachine = $this->coffeeMachineRepository->getCoffeeMachine();
-
-        if ((int) $coffeeMachine['status_id'] == CoffeeMachineStatusesEnum::ready)
-        {
-            $this->coffeeMachineRepository->updateMachine(CoffeeMachineStatusesEnum::works);
-
-            sleep(120);
-
-            $water = $coffeeMachine['water_count'] - CoffeeMachineCostsEnum::cost_water;
-            $coffee = $coffeeMachine['coffee_count'] - CoffeeMachineCostsEnum::cost_coffee;
-
-            if ($water < CoffeeMachineCostsEnum::cost_water || $coffee < CoffeeMachineCostsEnum::cost_coffee)
-            {
-                $this->coffeeMachineRepository->updateMachine(CoffeeMachineStatusesEnum::refuel, $water, $coffee);
-            }
-            else
-            {
-                $this->coffeeMachineRepository->updateMachine(CoffeeMachineStatusesEnum::ready, $water, $coffee);
-            }
-
-            $this->coffeeMachineRepository->createCoffee();
-        }
-        else
-        {
-            MakeCoffee::dispatch($this)->onQueue('coffee');
-        }
+        return ['message' => 'Кофемашина полностью дозаправлена'];
     }
 
     public function createNewCoffee(): array
     {
-        MakeCoffee::dispatch($this)->onQueue('coffee');
+        MakeCoffee::dispatch($this->coffeeMachineRepository)->onQueue('coffee');
 
         return ['message' => 'Кофе отправлен в очередь'];
     }
@@ -96,7 +66,7 @@ class CoffeeMachineService implements CoffeeMachineServiceInterface
     {
         $coffeeMachine = $this->coffeeMachineRepository->getCoffeeMachine();
 
-        return ['status' =>$coffeeMachine['status']];
+        return ['status' => $coffeeMachine['status']];
     }
 
     public function getRestCupsOfCoffee(): array

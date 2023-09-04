@@ -5,6 +5,8 @@ namespace App\Http\Controllers\CoffeeMachine;
 use App\Http\Controllers\Controller;
 use App\Services\impl\CoffeeMachineServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 
 class CoffeeMachineController extends Controller
 {
@@ -14,6 +16,7 @@ class CoffeeMachineController extends Controller
     {
         $this->coffeeMachineService = $coffeeMachineService;
     }
+
     public function createCoffee(): JsonResponse
     {
         $result = $this->coffeeMachineService->createNewCoffee();
@@ -23,9 +26,9 @@ class CoffeeMachineController extends Controller
 
     public function refuelMachine(): JsonResponse
     {
-        $this->coffeeMachineService->refuelMachine();
+        $result = $this->coffeeMachineService->refuelMachine();
 
-        return response()->json(['message' => 'Кофемашина полностью дозаправлена'], 200);
+        return response()->json($result, 200);
 
     }
 

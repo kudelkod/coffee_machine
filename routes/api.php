@@ -18,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => '/coffee'], function($route){
     $route->get('/create', [CoffeeMachineController::class, 'createCoffee']);
     $route->group(['prefix' => '/machine'], function ($route){
-        $route->get('/refuel', [CoffeeMachineController::class, 'refuelMachine']);
+        $route->post('/refuel', [CoffeeMachineController::class, 'refuelMachine']);
         $route->get('/status', [CoffeeMachineController::class, 'machineStatus']);
         $route->get('/reminder', [CoffeeMachineController::class, 'restOfWaterAndCoffee']);
-        $route->get('/reminder_coffee', [CoffeeMachineController::class, 'restCupsOfCoffee']);
+        $route->get('/reminder_cups', [CoffeeMachineController::class, 'restCupsOfCoffee']);
     });
 });

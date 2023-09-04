@@ -43,8 +43,6 @@ USER root
 # Set /storage /public permission to public
 RUN chmod -R 777 storage/*
 
-
-
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
